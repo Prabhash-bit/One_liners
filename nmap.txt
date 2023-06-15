@@ -1,0 +1,33 @@
+nmap 192.168.1.1 -sC
+nmap 192.168.1.1 –script default
+nmap 192.168.1.1 –script=banner	
+nmap 192.168.1.1 –script=http*	
+nmap 192.168.1.1 –script=http,banner
+nmap 192.168.1.1 –script “not intrusive”	
+nmap –script snmp-sysdescr –script-args snmpcommunity=admin 192.168.1.1
+
+nmap -p80 –script http-sql-injection scanme.nmap.org
+nmap -p80 –script http-unsafe-output-escaping scanme.nmap.org
+nmap –script whois* domain.com
+nmap -n -Pn -vv -O -sV –script smb-enum*,smb-ls,smb-mbenum,smb-os-discovery,smb-s*,smb-vuln*,smbv2* -vv 192.168.1.1
+nmap -Pn –script=dns-brute domain.com
+nmap -n -Pn -p 80 –open -sV -vvv –script banner,http-title -iR 1000
+nmap -Pn –script=http-sitemap-generator scanme.nmap.org
+
+
+nmap -f -t 0 -n -Pn –data-length 200 -D 192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.23 192.168.1.1
+nmap 192.168.1.1 -f
+nmap 192.168.1.1 –mtu 32
+nmap -D 192.168.1.101,192.168.1.102,192.168.1.103,192.168.1.23 192.168.1.1
+nmap -D decoy-ip1,decoy-ip2,your-own-ip,decoy-ip3,decoy-ip4 remote-host-ip
+nmap -S www.microsoft.com www.facebook.com
+nmap -g 53 192.168.1.1
+nmap –proxies http://192.168.1.1:8080, http://192.168.1.2:8080 192.168.1.1
+nmap –data-length 200 192.168.1.1
+
+
+--ttlvalue <value>
+--data-length 25
+
+-f 
+

