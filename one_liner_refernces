@@ -191,6 +191,11 @@ Then, paste the base64-encoded request into the “Paste from clipboard” featu
 
 49. API testing with HTTPie
 http https://target.com/api/v1/users/1 Authorization:'Bearer JWT_TOKEN'
+
+
+Paramspider one line
+cat urls.txt | xargs -I % sh -c 'python3 paramspider.py -d %'
+
 50. HTML injection testing
 curl -d '<script>alert("XSS")</script>' 'https://target.com/comment.php'
 This one-liner sends a POST request with a script tag as the comment parameter. The script tag will be reflected in the response if HTML injection is possible, indicating a potential vulnerability for cross-site scripting (XSS) attacks.
