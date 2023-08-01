@@ -207,3 +207,8 @@ cat blindsql.txt|parallel -j50 -q curl -o /dev/null -s -w %{time_total}\\n
 
 ghost path traversal
 httpx -l subs.txt -path "/assets/built%2F..%2F..%2F/package.json" -status-code -mc 200"
+
+
+
+while read -r domain; do cewl "$domain" >> wordlist.txt; done < activesubdomains.txt
+
