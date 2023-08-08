@@ -194,7 +194,7 @@ http https://target.com/api/v1/users/1 Authorization:'Bearer JWT_TOKEN'
 
 
 Paramspider one line
-cat urls.txt | xargs -I % sh -c 'python3 paramspider.py -d %' | grep FUZZ >urls.txt
+cat urls.txt | xargs -I % sh -c '/home/kali/tools/ParamSpider/paramspider.py -d %' | grep FUZZ >urls.txt
 
 50. HTML injection testing
 curl -d '<script>alert("XSS")</script>' 'https://target.com/comment.php'
