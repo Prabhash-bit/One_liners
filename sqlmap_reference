@@ -7,3 +7,30 @@ while true; do
 sudo pkill -HUP tor
 sleep 3
 done
+
+
+
+
+Install tor + polipo and then back up
+
+# apt-get install tor tor-geoipdb polipo
+
+# cp /etc/polipo/config /etc/polipo/config.bkp
+
+Replace the config file polipo by the pastebin file
+
+# vim /etc/polipo/config
+
+ou
+
+# gedit /etc/polipo/config
+
+Polipo configuration file: http://pastebin.com/sRLvt0ue
+
+Restart the services
+
+# service tor restart
+
+# service polipo restart
+
+# python sqlmap.py -u "SITE HERE" --random-agent -v 3 --tor --check-tor --dbs --threads=5
