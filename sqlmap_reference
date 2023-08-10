@@ -1,0 +1,2 @@
+sqlmap -u <vulnerable website> –tor –tor-type=SOCKS5
+sqlmap -u <Vulnerable Website> –tor –tor-type=SOCKS5 –user-agent=”Googlebot (compatible; Googlebot/2.1; +http://www.google.com/bot.html)”
