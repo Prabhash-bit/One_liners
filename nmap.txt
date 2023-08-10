@@ -31,3 +31,11 @@ nmap –data-length 200 192.168.1.1
 
 -f 
 
+apt-get install proxychains
+echo socks5 127.0.0.1 9050 >> /etc/proxychains.conf
+proxychains nmap -n 8.8.8.8
+
+
+for metasploit
+set Proxies socks5:127.0.0.1:9050
+
