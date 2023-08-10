@@ -1,3 +1,9 @@
 sqlmap -u <vulnerable website> –tor –tor-type=SOCKS5
 sqlmap -u <Vulnerable Website> –tor –tor-type=SOCKS5 –user-agent=”Googlebot (compatible; Googlebot/2.1; +http://www.google.com/bot.html)”
 sqlmap -u http://testphp.vulnweb.com/listproducts.php?cat=2 --tor --tor-type=SOCKS5 --user-agent="Googlebot (compatible; Googlebot/2.1; +http://www.google.com/bot.html)"
+
+#/bin/bash
+while true; do
+sudo pkill -HUP tor
+sleep 3
+done
