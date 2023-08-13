@@ -32,3 +32,6 @@ ffuf -w /path/to/postdata.txt -X POST -d "username=admin\&password=FUZZ" -u http
 # Fuzz POST JSON data. Match all responses not containing text "error".
 ffuf -w entries.txt -u https://example.org/ -X POST -H "Content-Type: application/json" \
       -d '{"name": "FUZZ", "anotherkey": "anothervalue"}' -fr "error"
+
+Cors bruteforcer
+ffuf -w subdomains-top1million-5000.txt -u http://10.10.10.208 -H 'Origin: http://FUZZ.crossfit.htb' -mr "Access-Control-Allow-Origin" -ignore-body
