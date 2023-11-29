@@ -1,0 +1,25 @@
+Download it here:
+https://github.com/ropnop/windapsearch
+
+windapsearch is a Python script to help enumerate users, groups and computers from a Windows domain through LDAP queries. 
+By default, Windows Domain Controllers support basic LDAP operations through port 389/tcp. With any valid domain account (regardless of privileges), 
+it is possible to perform LDAP queries against a domain controller for any AD related information.
+
+If we have no user account credentials we could still enumerate anonymously the environment with windapsearch. 
+Winapsearch has the ability to bind anonymously to the domain and enumerate active directory account credentials.
+
+But since we have credentials, we are going to try both ways, without credentials and with credentials
+
+See all the commands it has:
+python3 windapsearch.py
+
+python3 windapsearch.py -d pentesting.local -u pentesting\\ippsec -p Password12345 --dc-ip 192.168.1.50 -U -o data
+python3 windapsearch.py -d pentesting.local -u pentesting\\ippsec -p Password12345 --dc-ip 192.168.1.50 -G -o data
+python3 windapsearch.py -d pentesting.local -u pentesting\\ippsec -p Password12345 --dc-ip 192.168.1.50 --unconstrained-computers -o data
+python3 windapsearch.py -d pentesting.local -u pentesting\\ippsec -p Password12345 --dc-ip 192.168.1.50 -o data
+
+
+
+
+
+

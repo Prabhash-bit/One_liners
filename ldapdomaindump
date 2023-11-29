@@ -1,0 +1,11 @@
+Download it here:
+https://github.com/dirkjanm/ldapdomaindump
+ldapdomaindump is a tool which aims to solve the issue of finding interesting information via LDAP,
+by collecting and parsing information available via LDAP and outputting it in a human readable HTML format, as well as machine readable json and csv/tsv/greppable files.
+
+See all the commands:
+python3 ldapdomaindump.py
+
+python3 ldapdomaindump.py --user pentesting\\ippsec -p Password12345 ldap://192.168.1.50:389 --no-json --no-grep -o data
+
+
