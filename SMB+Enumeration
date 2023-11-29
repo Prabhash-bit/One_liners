@@ -1,0 +1,9 @@
+SMB is a communication protocol for providing shared access to files, printers, and serial ports between nodes on a network. 
+
+ls /usr/share/nmap/scripts/ | grep SMB
+nmap --script smb-enum-* -p 139,445, 192.168.1.53 -Pn
+nmap --script smb-vuln-* -p 139,445, 192.168.1.53 -Pn
+smbclient -L 192.168.1.53
+smbmap -H 192.168.1.53
+smbclient \\\\192.168.1.53\\AD
+
