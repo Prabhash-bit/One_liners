@@ -231,3 +231,5 @@ curl -s https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=hackerone
 
 
  curl https://www.virustotal.com/ui/domains/kiwi.com/subdomains | jq '.data | .[].id' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u
+
+cat corstexturl.txt | soru -u | anew |while read host do ; do curl -s — path-as-is — insecure -H “Origin: test.com” “$host” | grep -qs “Access-control-allow-origin: test.com” && echo “$host \033[0;31m” cors Vulnerable;done
