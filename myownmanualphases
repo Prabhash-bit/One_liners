@@ -1,0 +1,3 @@
+subfinder -dL sorted_subdomains.txt >sub1.txt  
+$ amass enum -active -d owasp.org -public-dns -brute -w /root/dns_lists/deepmagic.com-top50kprefixes.txt -src -ip -dir amass4owasp -config /root/amass/config.ini -o amass_results_owasp.txt
+amass enum  -aw /usr/share/wordlists/mega_subdomains_wordlist.txt -d dreamsolution.nl >result-amass.txt 
