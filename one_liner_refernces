@@ -235,3 +235,5 @@ curl -s https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=hackerone
 cat corstexturl.txt | soru -u | anew |while read host do ; do curl -s — path-as-is — insecure -H “Origin: test.com” “$host” | grep -qs “Access-control-allow-origin: test.com” && echo “$host \033[0;31m” cors Vulnerable;done
 
 echo "target.com" | waybackurls | egrep -iv ".(jpg|jpeg|gif|css|tiff|woff|woff2|icon|pdf|svg|txt|js)" | grep -IE "[?].*[&]?" | grep "=" | inew -p | python3 /root/tools/pvreplace/pvreplace.py '<sCrIpt>confirm(1)</sCrIpt>, <script>confirm(1)</script>' | xss checker -match '<sCrIpt>confirm(1)</sCrIpt>, <script>confirm(1)</script>' -vuln 
+
+waybackurls url | grep '\.js$' | awk -F '?' '{print $1}' | sort -u | xargs -I{} python lazyegg[.]py "{}" --js_urls --domains --ips > urls && cat urls | grep '\.' | sort -u | xargs -I{} httpx -silent -u {} -sc -title -td
